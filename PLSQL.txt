@@ -1,0 +1,24 @@
+
+
+create or replace procedure fundtransfer(sourceaccount number, targetaccount number,amounttotransfer number) as sourcebalance number;
+  BEGIN
+DBMS_OUTPUT.PUT_LINE('--Fund Transfer in Progress--');
+select acbalance INTO sourcebalance from account where acno=sourceaccount;
+if sourcebalance >amounttotransfer
+then
+update account set acbalance =acbalance-amounttotransfer where acno=sourceaccount;
+ DBMS_OUTPUT.PUT_LINE('debited'||amounttotransfer||'from the source account..');
+ update account set acbalance =acbalance+amounttotransfer where acno=targetaccount;
+ DBMS_OUTPUT.PUT_LINE('credited'||amounttotransfer||'to the beneficiary account..');
+commit;
+DBMS_OUTPUT.PUT_LINE('FUNDS TRANSFERED');
+ELSE
+DBMS_OUTPUT.PUT_LINE('insufficient funds');
+end if;
+end;
+/
+BEGIN
+FUNDTRANSFER(101,102,5000);
+FUNDTRANSFER(103,104,8000);
+END;
+/
